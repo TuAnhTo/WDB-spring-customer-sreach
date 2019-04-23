@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Optional;
-
 @Controller
 public class CustomerController {
 
@@ -28,17 +26,13 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
-    public ModelAndView listCustomers(@RequestParam("s") Optional<String> s, Pageable pageable){
-        Page<Customer> customers;
-        if(s.isPresent()){
-            customers = customerService.findAllByFirstNameContaining(s.get(), pageable);
-        } else {
-            customers = customerService.findAll(pageable);
-        }
+    public ModelAndView listCustomers(Pageable pageable){
+        Page<Customer> customers = customerService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/customer/list");
         modelAndView.addObject("customers", customers);
         return modelAndView;
     }
+
 
     @GetMapping("/create-customer")
     public ModelAndView showCreateForm(){
